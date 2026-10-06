@@ -1,0 +1,21 @@
+# Lab clients from scripts/lib/topology.sh.
+# Counters are read from /sys/class/net/<interface>/statistics inside each namespace.
+# link_capacity_bps is the denominator for utilization. Leave it null until you
+# choose a real bottleneck rate. The monitor will not invent one from the veth.
+
+sample_interval_seconds: 1.0
+link_capacity_bps: null
+
+clients:
+  - id: client-a
+    ipv4: 192.168.100.11
+    namespace: bw-client-a
+    interface: bwv-a
+  - id: client-b
+    ipv4: 192.168.100.12
+    namespace: bw-client-b
+    interface: bwv-b
+  - id: client-c
+    ipv4: 192.168.100.13
+    namespace: bw-client-c
+    interface: bwv-c

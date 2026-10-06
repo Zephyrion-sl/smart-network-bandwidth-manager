@@ -1,0 +1,21 @@
+# Bits per second. Enter congestion at 80% of total_capacity.
+# Leave only after utilization falls below 70% (threshold minus clear_margin).
+# cooldown is the minimum seconds between tc changes.
+# A new share is installed only when some client differs by more than
+# change_tolerance_bps.
+
+sampling_interval: 1.0
+congestion_threshold: 0.8
+clear_margin: 0.1
+total_capacity: 100000000
+minimum_bandwidth: 0
+maximum_bandwidth: null
+cooldown: 10
+change_tolerance_bps: 1000000
+idle_bps: 10000
+weights:
+  client-a: 1
+  client-b: 1
+  client-c: 1
+monitor_config: config/monitor.example.yaml
+qos_config: config/qos.example.yaml

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bandwidth manager</title>
+  <link rel="stylesheet" href="/static/dashboard.css">
+</head>
+<body>
+  <header class="top">
+    <div>
+      <h1>Bandwidth manager</h1>
+      <p class="subtitle">Observed traffic, the allocator’s share, and what Linux actually accepted.</p>
+    </div>
+    <p id="clock" class="clock">Loading…</p>
+  </header>
+
+  <p id="banner" class="banner" hidden></p>
+
+  <section class="summary" aria-label="Network summary">
+    <article>
+      <h2>Capacity</h2>
+      <p id="capacity" class="figure">—</p>
+      <p id="threshold" class="hint"></p>
+    </article>
+    <article>
+      <h2>Utilization</h2>
+      <p id="utilization" class="figure">—</p>
+      <p class="hint">Observed. Sum of each client’s busier direction, divided by capacity.</p>
+    </article>
+    <article>
+      <h2>Congestion</h2>
+      <p id="congestion" class="figure status">Not evaluated</p>
+      <p class="hint">From the controller, including its clear margin. Not a raw threshold check.</p>
+    </article>
+    <article>
+      <h2>Clients</h2>
+      <p id="clients-count" class="figure">—</p>
+      <p id="clients-detail" class="hint"></p>
+    </article>
+  </section>
+
+  <ul class="legend">
+    <li><span class="swatch observed"></span> Observed — measured throughput</li>
+    <li><span class="swatch allocated"></span> Allocated — share the allocator selected</li>
+    <li><span class="swatch enforced"></span> Enforced — share this running process last installed with tc</li>
+  </ul>
+
+  <div class="columns">
+    <section>
+      <h2>Clients</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Client</th>
+              <th>IP</th>
+              <th>Status</th>
+              <th>Usage</th>
+              <th>Throughput</th>
+              <th>Allocated</th>
+              <th>Enforced</th>
+              <th>Policy</th>
+            </tr>
+          </thead>
+          <tbody id="client-rows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>Controls</h2>
+      <form id="policy-form">
+        <label>
+          Client
+          <select id="client-select" name="client_id" required></select>
+        </label>
+        <label>
+          Weight
+          <input id="weight" name="weight" type="number" min="1" step="1" required>
+        </label>
+        <label>
+          Minimum bandwidth (Mbps)
+          <input id="min-mbps" name="min_mbps" type="number" min="0" step="0.1" placeholder="shared default">
+        </label>
+        <label>
+          Maximum bandwidth / limit (Mbps)
+          <input id="max-mbps" name="max_mbps" type="number" min="0" step="0.1" placeholder="no client cap">
+        </label>
+        <p class="hint">Saving writes the policy only. Linux changes when you update allocation, and only if tc succeeds.</p>
+        <div class="actions">
+          <button type="submit">Save client policy</button>
+          <button id="apply-btn" type="button">Update allocation</button>
+          <button id="clear-btn" type="button">Clear QoS policy</button>
+        </div>
+      </form>
+      <p id="action-result" class="result" role="status"></p>
+    </section>
+  </div>
+
+  <section>
+    <h2>Allocation</h2>
+    <div id="chart" class="chart"></div>
+  </section>
+
+  <section>
+    <h2>Recent control events</h2>
+    <ol id="events" class="events"></ol>
+  </section>
+
+  <script src="/static/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+# HTB limits are installed only on these interfaces, inside bw-gw.
+# Bandwidths passed to the manager are bits per second.
+# 20 Mbps = 20000000. class_minor is a decimal integer; tc prints it in hex
+# (16 -> classid 1:10).
+
+namespace: bw-gw
+default_class_bps: 1000000
+max_bandwidth_bps: 10000000000
+dry_run: false
+
+clients:
+  - id: client-a
+    ipv4: 192.168.100.11
+    download_interface: bwv-gw-a
+    upload_interface: bwv-gw-wan
+    class_minor: 16
+  - id: client-b
+    ipv4: 192.168.100.12
+    download_interface: bwv-gw-b
+    upload_interface: bwv-gw-wan
+    class_minor: 32
+  - id: client-c
+    ipv4: 192.168.100.13
+    download_interface: bwv-gw-c
+    upload_interface: bwv-gw-wan
+    class_minor: 48
